@@ -61,6 +61,10 @@ namespace CDTP_server_core
                 endpoints.MapControllers();
 
             });
+            // custom configuration
+
+            Sql.Listen();
+
         }
     }
 }

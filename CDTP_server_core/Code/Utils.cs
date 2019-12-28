@@ -12,7 +12,7 @@ namespace CDTP_server_core
     public static class Sql
     {
         static NpgsqlConnection static_conn = new NpgsqlConnection("Server=127.0.0.1;Database=CDTP;User Id=postgres;Password=o;");
-        static NpgsqlConnection notify_conn = new NpgsqlConnection("Server=127.0.0.1;Database=CDTP;User Id=postgres;Password=o;");
+        public static NpgsqlConnection notify_conn = new NpgsqlConnection("Server=127.0.0.1;Database=CDTP;User Id=postgres;Password=o;");
 
         public static DataTable Query(string query)
         {
@@ -69,11 +69,20 @@ namespace CDTP_server_core
             if (notify_conn.State != ConnectionState.Open)
                 notify_conn.Open();
 
-            using (var command = new NpgsqlCommand("listen usage_insert_notify", notify_conn))
+            using (var command = new NpgsqlCommand("listen usage_insert", notify_conn))
             {
                 command.ExecuteNonQuery();
             }
 
+            Task.Run(() =>
+            { 
+                while(true)
+                {
+                    notify_conn.Wait();
+                    //throw new Exception("some notification occurs / finally");
+                }
+            });
+            
 
         }
 

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Npgsql;
 
 namespace CDTP_server_core.Pages
 {
@@ -15,31 +16,35 @@ namespace CDTP_server_core.Pages
         [HttpGet]
         public async Task Get(CancellationToken cancellationToken)
         {
-            var response = Response;
-            response.Headers.Add("Content-Type", "text/event-stream");
+ 
+            Response.Headers.Add("Content-Type", "text/event-stream");
+            var deviceid = HttpContext.Session.GetString("deviceid");
 
-
-            Task.Run(() =>
+            if(deviceid != null)
             {
-                Task.Delay(1 * 2314).Wait();
+                NotificationEventHandler notificationEventHandler = (s, d) =>
+                {
+                    if (deviceid == d.Payload.Split(',')[1])
+                    {
+                        Response.WriteAsync($"data: Controller at {DateTime.Now}\r\r");
 
-                response
-                     .WriteAsync($"data: From Task Controller x at {DateTime.Now}\r\r").Wait();
+                        Response.Body.Flush();
+                    }
+                };
 
-                response.Body.Flush();
-
-
-            });
+                Sql.notify_conn.Notification += notificationEventHandler;
 
 
-            for (var i = 0; true; ++i)
-            {
-                await response
-                    .WriteAsync($"data: Controller {i} at {DateTime.Now}\r\r");
 
-                response.Body.Flush();
-                await Task.Delay(5 * 1000);
+                cancellationToken.WaitHandle.WaitOne();
+
+                Sql.notify_conn.Notification -= notificationEventHandler;
             }
+
+
+   
+
+ 
         }
     }
 }

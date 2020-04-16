@@ -34,14 +34,6 @@ namespace CDTP_server_core.Pages.Controller
                 }
                 else
                 {
-                    //UserInfo user = new UserInfo();
-                    //
-                    //
-                    //user.username = data.Rows[0][0] as string;
-                    //user.id = (int)data.Rows[0][1];
-                    //user.name = data.Rows[0][2] as string;
-                    //user.surname = data.Rows[0][3] as string;
-
 
                     HttpContext.Session.SetString("user", "010");
                     HttpContext.Session.SetString("username", data.Rows[0][0] as string);
@@ -50,16 +42,11 @@ namespace CDTP_server_core.Pages.Controller
                     HttpContext.Session.SetString("name", data.Rows[0][2] as string);
                     HttpContext.Session.SetString("surname", data.Rows[0][3] as string);
 
- 
-           
-                    //Response.Write(data);
-                    // Response.Redirect("dashboard.aspx");
                 }
             }
 
 
         }
-
 
         [HttpGet]
         public async Task Get()
@@ -74,9 +61,9 @@ namespace CDTP_server_core.Pages.Controller
                     string plotDataString = "";
                     string plotColorString = "";
 
-                 
-
-                    var table = Sql.Query(string.Format(@"select 
+ 
+                    var monthlyCostsUsagesTable = Sql.Query(string.Format(@"
+                                                        select 
                                                         	sum(cost),
                                                         	sum(freeusage)/sum(energyusage),
                                                         	extract(year from timestamp) as selected_year,
@@ -99,8 +86,8 @@ namespace CDTP_server_core.Pages.Controller
                     //add rows
 
                     int startIndex = 0;
-                    int year = (int)((double)table.Rows[0][2]);
-                    int month = (int)((double)table.Rows[0][3]);
+                    int year = (int)((double)monthlyCostsUsagesTable.Rows[0][2]);
+                    int month = (int)((double)monthlyCostsUsagesTable.Rows[0][3]);
                     //if ( DateTime.Now.Year == year
                     //    &&
                     //    DateTime.Now.Month == month)
@@ -108,9 +95,9 @@ namespace CDTP_server_core.Pages.Controller
                     //    startIndex++;
                     //}
 
-                    for (int i = startIndex; i < table.Rows.Count; i++)
+                    for (int i = startIndex; i < monthlyCostsUsagesTable.Rows.Count; i++)
                     {
-                        var row = table.Rows[i];
+                        var row = monthlyCostsUsagesTable.Rows[i];
                         int ratio = (int)((double)row[1] * 100);
 
                         var cost = (double)row[0];
@@ -132,6 +119,7 @@ namespace CDTP_server_core.Pages.Controller
                      string.Format("{0:0.00}", cost) + " birim" +
                     "</td>" +
                     "<td>" +
+                    // double escpa because json...
                     "  <div class=\\\"progress\\\">" +
                     $"    <div class=\\\"progress-bar bg-gradient-success\\\" role=\\\"progressbar\\\" style=\\\"width: {ratio}%\\\" aria-valuenow=\\\"{ratio}\\\" " +
                     "    aria-valuemin=\\\"0\\\" aria-valuemax=\\\"100\\\"></div>" +
@@ -140,10 +128,10 @@ namespace CDTP_server_core.Pages.Controller
 
                     }
                     tableHtml += "</table>";
-                    //tableHtml =  tableHtml.Replace("\"", "\\\"");
+               
 
-
-                    table = Sql.Query("select timestamp,energyusage,freeusage from usage where deviceid='" + deviceid + "' order by timestamp DESC limit 30 ");
+                     
+                    var table = Sql.Query("select timestamp,energyusage,freeusage from usage where deviceid='" + deviceid + "' order by timestamp DESC limit 30 ");
                     var sumtable = Sql.Query("select sum(energyusage),sum(freeusage) from usage where deviceid='" + deviceid + "' ");
 
                     double totalUsage = (double)sumtable.Rows[0][0];
@@ -158,7 +146,7 @@ namespace CDTP_server_core.Pages.Controller
 
 
                         int index = 0;
-                        while (index < table.Rows.Count && ((DateTime)table.Rows[index][0]).Month == lastDate.Month)
+                        while (index <= table.Rows.Count && ((DateTime)table.Rows[index][0]).Month == lastDate.Month)
                         {
                             if (index < 7)
                             {
@@ -177,21 +165,28 @@ namespace CDTP_server_core.Pages.Controller
                         var sb1 = new StringBuilder();
                         var sb2 = new StringBuilder();
 
-                        sb0.Append(dailyUsages[0, 0]);
-                        sb1.Append(dailyUsages[0, 1]);
+                        sb0.Append(dailyUsages[1, 0]);
+                        sb1.Append(dailyUsages[1, 1]);
                         sb2.Append(dayCount.ToString());
 
 
-                        for (int i = 1; i < dailyUsages.Length / 2; i++)
+                        for (int i = 2; i < dailyUsages.Length / 2; i++)
                         {
+                            
                             sb0.Append(",");
                             sb0.Append(dailyUsages[i, 0]);
                             sb1.Append(",");
                             sb1.Append(dailyUsages[i, 1]);
-                            sb2.Append(",");
-                            sb2.Append(dayCount.ToString());
+
 
                             dayCount++;
+
+                            sb2.Append(",");
+                            sb2.Append(dayCount.ToString());
+                            
+                            
+                          
+                            
                         }
 
                         var json = "{\"datasets\":[{\"label\":\"EnergyUsage\"," +
@@ -229,7 +224,7 @@ namespace CDTP_server_core.Pages.Controller
                         Response.Body.Close();
 
                     }
-
+                     
                    // var tablestr = Util.ConvertDataTableToHTML(table);
 
                 }else
@@ -243,6 +238,18 @@ namespace CDTP_server_core.Pages.Controller
 
 
             }
+        }
+
+
+        [HttpGet("logout")]
+        public void Logout()
+        {
+            if(HttpContext.Session.IsAvailable)
+            {
+                HttpContext.Session.Clear();
+            } 
+            Response.Redirect("/login");
+            Response.Body.Flush();
         }
     }
 }

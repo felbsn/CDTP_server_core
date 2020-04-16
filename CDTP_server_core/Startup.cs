@@ -63,6 +63,7 @@ namespace CDTP_server_core
             });
             // custom configuration
 
+            Sql.InitConnections("127.0.0.1", "CDTP", "postgres", "o");
             Sql.Listen();
 
         }

@@ -29,6 +29,7 @@ namespace CDTP_server_core.Pages
             }else
             {
                 HttpContext.Response.Redirect("login");
+                HttpContext.Response.Body.Flush();
             }
  
         }

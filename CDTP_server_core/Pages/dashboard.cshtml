@@ -38,18 +38,18 @@
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo" href="dashboard.aspx"><img src="custom/logo.png" alt="logo" /></a>
-                <a class="navbar-brand brand-logo-mini" href="dashboard.aspx"><img src="custom/logo_small.png" alt="logo" /></a>
+                <a class="navbar-brand brand-logo" href="dashboard"> <object data="custom/logo.svg" type="image/svg+xml"> </object></a>
+                <a class="navbar-brand brand-logo-mini" href="dashboard"> <object data="custom/logo_small.svg" type="image/svg+xml"> </object></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-stretch">
 
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item nav-profile dropdown">
-                        <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle"  id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                             <div class="nav-profile-img">
 
-                                @*<%--<img src="" alt="image"> <!-- web/template/images/faces/face1.jpg -->--%>*@
-                                <span class="availability-status online"></span>
+                                @*<%--<img src="" alt="image"> <!-- web/template/images/faces/face1.jpg -->--%>
+                                    <span class="availability-status online"></span>*@
                             </div>
                             <div class="nav-profile-text">
                                 <p class="mb-1 text-black">@Model.userInfo.name @Model.userInfo.surname</p>
@@ -57,11 +57,11 @@
                         </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
                             <a class="dropdown-item" href="#">
-                                <i class="mdi mdi-cached mr-2 text-success"></i>
+                                <i  class="mdi mdi-cached mr-2 text-success"></i>
                                 Activity Log
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a id="log-out-user" class="dropdown-item" href="#">
+                            <a id="log-out-user" class="dropdown-item" href="r/logout">
                                 <i class="mdi mdi-logout mr-2 text-primary"></i>
                                 Signout
                             </a>
@@ -73,64 +73,25 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                        <a class="nav-link count-indicator dropdown-toggle" onclick="notification_dropdown_toggle()" id="notificationDropdown" href="#" data-toggle="dropdown">
+                            
                             <i class="mdi mdi-bell-outline"></i>
-                            <span class="count-symbol bg-danger"></span>
+                            <span id="notification_dropdown_light" class="count-symbol  "></span>
+                          
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                        
+                        <div  class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                             <h6 class="p-3 mb-0">Notifications</h6>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-success">
-                                        <i class="mdi mdi-calendar"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                    <h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
-                                    <p class="text-gray ellipsis mb-0">
-                                        Just a reminder that you have an event today
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-warning">
-                                        <i class="mdi mdi-settings"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                    <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                                    <p class="text-gray ellipsis mb-0">
-                                        Update dashboard
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item preview-item">
-                                <div class="preview-thumbnail">
-                                    <div class="preview-icon bg-info">
-                                        <i class="mdi mdi-link-variant"></i>
-                                    </div>
-                                </div>
-                                <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                                    <h6 class="preview-subject font-weight-normal mb-1">Launch Admin</h6>
-                                    <p class="text-gray ellipsis mb-0">
-                                        New admin wow!
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <h6 class="p-3 mb-0 text-center">See all notifications</h6>
+
+                            <div id="notification_dropdown">
+ 
+
+                            </div>
+
                         </div>
                     </li>
 
-                    <li class="nav-item nav-settings d-none d-lg-block">
-                        <a class="nav-link" href="#">
-                            <i class="mdi mdi-format-line-spacing"></i>
-                        </a>
-                    </li>--%>
+ 
                 </ul>
                 <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
                     <span class="mdi mdi-menu"></span>
@@ -158,7 +119,7 @@
 
 
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard.aspx">
+                        <a class="nav-link" href="dashboard">
                             <span class="menu-title">Ana Ekran</span>
                             <i class="mdi mdi-home menu-icon"></i>
                         </a>
@@ -167,7 +128,7 @@
 
 
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard.aspx">
+                        <a class="nav-link" href="#">
                             <span class="menu-title">Hesap Ayarları</span>
                             <i class="mdi mdi-account-settings-variant menu-icon"></i>
                         </a>
@@ -181,7 +142,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <a class="nav-link" data-toggle="collapse" href="#" aria-expanded="false" aria-controls="ui-basic">
                             <span class="menu-title">İstekler</span>
                             <i class="menu-arrow"></i>
                             <i class="mdi mdi-crosshairs-gps menu-icon"></i>
@@ -377,43 +338,7 @@
 	});
 
 
-        $("#log-out").click(function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: 'logOut.aspx',
-                success: function (data) {
-
-                    console.log("logout succesfull ");
-                    window.location = "login.aspx"
-
-                },
-                error: function () {
-
-                    console.log("logout unsuccessful ");
-                }
-            });
-        });
-
-        $("#log-out-user").click(function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: 'logOut.aspx',
-                success: function (data) {
-
-                    console.log("logout succesfull ");
-                    window.location = "login.aspx"
-
-                },
-                error: function () {
-
-                    console.log("logout unsuccessful ");
-                }
-            });
-        });
-
-
+ 
 
 
 
@@ -459,7 +384,32 @@
 
 
 
+        
+        function addUpdateNotification() {
 
+             let dropdown = document.getElementById("notification_dropdown");
+             dropdown.innerHTML =
+                 `<a class="dropdown-item preview-item">
+                     <div class="preview-thumbnail">
+                         <div class="preview-icon bg-success">
+                             <i class="mdi mdi-update"></i>
+                         </div>
+                     </div>
+                     <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                         <h6 class="preview-subject font-weight-normal mb-1">${"Değerler Güncellendi!"}</h6>
+                         <p class="text-gray ellipsis mb-0">
+                             ${Date().toLocaleString()}
+                         </p>
+                     </div>
+                 </a>
+                 <div class="dropdown-divider"></div>
+                ${ dropdown.innerHTML}`;
+
+             if (dropdown.childElementCount > 10) {
+                 dropdown.removeChild(dropdown.lastElementChild)
+                 dropdown.removeChild(dropdown.lastElementChild)
+             }
+        }
 
 
 
@@ -475,13 +425,23 @@
         }
 
 
+
          sse_begin("sse", (e) =>
          {
              console.log("update notification reached!... " + e);
+
              fillData()
-          
+
+             document.getElementById("notification_dropdown_light").classList.add("bg-success");
+ 
+             addUpdateNotification()
          })
 
+        function notification_dropdown_toggle() {
+        
+            document.getElementById("notification_dropdown_light").classList.remove("bg-success");
+
+        }
 
         function call_ajax(url, response_type, callback) {
             var xhttp = new XMLHttpRequest();
@@ -502,20 +462,29 @@
 
                 //alert(response);
 
+                var eusagegradient = ctx.createLinearGradient(ctx.canvas.width/2, 0, ctx.canvas.width/2, ctx.canvas.height);
+                eusagegradient.addColorStop(0, "rgba(255, 87, 25, 1)");
+                eusagegradient.addColorStop(1, "rgba(255, 87, 25, 0.1)");
+
+                var efreegradient = ctx.createLinearGradient(ctx.canvas.width/2, 0, ctx.canvas.width/2, ctx.canvas.height);
+                efreegradient.addColorStop(0, "rgba(80, 255, 80, 1)");
+                efreegradient.addColorStop(1, "rgba(60, 210, 60, 0.1)");
+
                 setChartData(lineChart, response.labels,
                     [
+                                                {
+                            data: response.datasets[1].data,
+                            label: "Yenilenebilir Enerji Kullanımı",
+                            backgroundColor: efreegradient,
+                            borderColor: 'rgba(60, 210, 60, 0.9)'
+                        },
                         {
                             data: response.datasets[0].data,
                             label: "Enerji Kullanımı",
-                            backgroundColor: 'rgba(255, 87, 25, 0.2)',
+                            backgroundColor: eusagegradient,
                             borderColor: 'rgba(255, 87, 25, 0.8)'
-                        },
-                        {
-                            data: response.datasets[1].data,
-                            label: "Yenilenebilir Enerji Kullanımı",
-                            backgroundColor: 'rgba(60, 210, 60, 0.2)',
-                            borderColor: 'rgba(60, 210, 60, 0.9)'
                         }
+
 
                     ],
                     null,
@@ -554,7 +523,7 @@
                 // document.getElementById("traffic-chart-legend").innerHTML = (trafficChart.generateLegend());
 
                 let month = new Intl.DateTimeFormat('tr', { month: 'long' }).format(new Date(response.date));
-                document.getElementById("line-chart-title").innerText = month + " Kullanım Grafiği";
+                document.getElementById("line-chart-title").innerText = new Date(response.date).getFullYear().toString()+" "+ month + " Kullanım Grafiği";
                 document.getElementById("totalUsages").innerText = response.extra.totalUsages.toFixed(2) + " birim";
                 document.getElementById("weeklyUsages").innerText = response.extra.weeklyUsages.toFixed(2) + " birim";
                 document.getElementById("freeUsages").innerText = response.extra.freeUsages.toFixed(2) + " birim";

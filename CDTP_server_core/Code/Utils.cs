@@ -11,13 +11,27 @@ namespace CDTP_server_core
 {
     public static class Sql
     {
-        static NpgsqlConnection static_conn = new NpgsqlConnection("Server=127.0.0.1;Database=CDTP;User Id=postgres;Password=o;");
-        public static NpgsqlConnection notify_conn = new NpgsqlConnection("Server=127.0.0.1;Database=CDTP;User Id=postgres;Password=o;");
+        public static void InitConnections(string server , string db , string username , string password )
+        {
+            connectionString = new Npgsql.NpgsqlConnectionStringBuilder()
+            {
+                Host = server,
+                Database = db,
+                Username = username,
+                Password = password
+            }.ConnectionString;
+
+            static_conn = new NpgsqlConnection(connectionString);
+            notify_conn = new NpgsqlConnection(connectionString);
+        }
+        public static string connectionString;
+        static NpgsqlConnection static_conn;
+        public static NpgsqlConnection notify_conn;
 
         public static DataTable Query(string query)
         {
             DataTable table = new DataTable();
-            var conn = new NpgsqlConnection("Server=127.0.0.1;Database=CDTP;User Id=postgres;Password=o; ");
+            var conn = new NpgsqlConnection(connectionString);
             conn.Open();
 
             Npgsql.NpgsqlDataAdapter npgsqlDataAdapter = new NpgsqlDataAdapter(query, conn);
@@ -30,26 +44,7 @@ namespace CDTP_server_core
 
             return table;
         }
-
-        public static async Task<DataTable> QueryAsync(string query)
-        {
-            return await Task.Run(() => {
-
-                DataTable table = new DataTable();
-                var conn = new NpgsqlConnection("Server=127.0.0.1;Database=CDTP;User Id=postgres;Password=o; ");
-                conn.Open();
-
-                Npgsql.NpgsqlDataAdapter npgsqlDataAdapter = new NpgsqlDataAdapter(query, conn);
-
-
-
-                npgsqlDataAdapter.Fill(table);
-                conn.Close();
-
-                return table;
-
-            });
-        }
+ 
         public static DataTable StaticQuery(string query)
         {
             DataTable table = new DataTable();

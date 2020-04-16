@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CDTP_server_core.Pages
 {
-    [Route("ssex")]
+    [Route("sse_old")]
     [ApiController]
     public class RequestController : ControllerBase
     {
